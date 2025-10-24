@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vasoactive Drug Converter for ICNARC CMP</title>
+    <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+@media (min-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.weight-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border-left: 4px solid #667eea;
+}
+
+.weight-input {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.weight-input label {
+    font-weight: 600;
+    color: #333;
+}
+
+.weight-input input {
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 180px;
+    transition: border-color 0.3s;
+}
+
+.weight-input input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.warning {
+            color: #b92c0d;
+        .error {
+            color: #b92c0d;
+        }
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.calculator-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.drug-card {
+    background: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.drug-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.drug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f1f3f5;
+}
+
+.drug-name {
+    font-weight: 700;
+    color: #333;
+    font-size: 18px;
+}
+
+.concentration {
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.input-group label {
+    min-width: 100px;
+    color: #495057;
+    font-weight: 500;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.unit {
+    color: #6c757d;
+    font-size: 14px;
+    min-width: 100px;
+}
+
+.results-section {
+    background: #e7f3ff;
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 4px solid #0d6efd;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+.results-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 20px;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #cfe2ff;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.result-value {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.result-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0d6efd;
+    min-width: 80px;
+    text-align: right;
+}
+
+.result-unit {
+    color: #6c757d;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.note {
+    font-style: italic;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+    text-align: center;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.footer a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .result-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .result-value {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 1023px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    .results-section {
+        position: static;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vasoactive Drug Converter for ICNARC CMP</h1>
+        <p class="subtitle">23/10/2025</p>
+        
+        <div class="weight-section">
+            <div class="weight-input">
+                <label for="bodyWeight">Actual Body Weight:</label>
+                <input type="number" id="bodyWeight" step="0.1" min="0" placeholder="Enter weight">
+                <span class="unit">kg</span>
+                <span class="warning" id="weightWarning"></span>
+                <button type="button" id="clearBtn" style="margin-left:20px; padding:8px 18px; font-size:15px; border-radius:6px; border:1px solid #b92c0d; background:#b92c0d; color:#fff; cursor:pointer;">Clear</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="calculator-grid">
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Dobutamine</span>
+                        <span class="concentration">5mg/ml</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Infusion Rate:</label>
+                        <input type="number" id="dobutamine" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Adrenaline</span>
+                        <span class="concentration">4mg/50ml</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Infusion Rate:</label>
+                        <input type="number" id="adrenaline" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Noradrenaline</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Single (4mg/50ml):</label>
+                        <input type="number" id="noradrenaline-single" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Double (8mg/50ml):</label>
+                        <input type="number" id="noradrenaline-double" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Quad (16mg/50ml):</label>
+                        <input type="number" id="noradrenaline-quad" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Vasopressin</span>
+                        <span class="concentration">20units/50ml</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Infusion Rate:</label>
+                        <input type="number" id="vasopressin" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Metaraminol Infusion</span>
+                        <span class="concentration">0.5mg/ml</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Infusion Rate:</label>
+                        <input type="number" id="metaraminol-infusion" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Metaraminol Bolus</span>
+                        <span class="concentration">0.5mg/ml</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Total Amount:</label>
+                        <input type="number" id="metaraminol-bolus" step="0.1" min="0" placeholder="0">
+                        <span class="unit">mls <span class="note">(total amount bolused)</span></span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Terlipressin Bolus</span>
+                        <span class="concentration">1-2 mg qds</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Dose:</label>
+                        <input type="number" id="terlipressin-bolus" step="0.1" min="0" placeholder="0">
+                        <span class="unit">mg</span>
+                    </div>
+                </div>
+                
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <span class="drug-name">Milrinone <span class="note" style="font-weight: normal; font-size: 12px;">for CSM module only</span></span>
+                        <span class="concentration">0.2mg/ml</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Infusion Rate:</label>
+                        <input type="number" id="milrinone" step="0.1" min="0" placeholder="0">
+                        <span class="unit">ml/hr</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="results-title">Enter the Following in Medicus</h2>
+                
+                <div class="result-item">
+                    <span class="result-label">Dopamine:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-dopamine">-</span>
+                        <span class="result-unit">µg kg<sup>-1</sup> min<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Dobutamine:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-dobutamine">-</span>
+                        <span class="result-unit">µg kg<sup>-1</sup> min<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Adrenaline:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-adrenaline">-</span>
+                        <span class="result-unit">µg kg<sup>-1</sup> min<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Noradrenaline:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-noradrenaline">-</span>
+                        <span class="result-unit">µg kg<sup>-1</sup> min<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Vasopressin:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-vasopressin">-</span>
+                        <span class="result-unit">U min<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Phenylepherine:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-phenylepherine">-</span>
+                        <span class="result-unit">µg kg<sup>-1</sup> min<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Metaraminol Infusion:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-metaraminol-infusion">-</span>
+                        <span class="result-unit">mg hour<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Terlipressin Infusion:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-terlipressin-infusion">-</span>
+                        <span class="result-unit">mg hour<sup>-1</sup></span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Metaraminol Bolus:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-metaraminol-bolus">-</span>
+                        <span class="result-unit">mg</span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Terlipressin Bolus:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-terlipressin-bolus">-</span>
+                        <span class="result-unit">mg</span>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Milrinone:</span>
+                    <div class="result-value">
+                        <span class="result-number" id="result-milrinone">-</span>
+                        <span class="result-unit">µg kg<sup>-1</sup> min<sup>-1</sup></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Created by Dr Matthew Smith</strong> | <a href="mailto:dr@mattsmith.email">dr@mattsmith.email</a></p>
+            <p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></p>
+            <p style="font-size: 11px; margin-top: 10px;">This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Get all input elements
+        const bodyWeight = document.getElementById('bodyWeight');
+        const dobutamine = document.getElementById('dobutamine');
+        const adrenaline = document.getElementById('adrenaline');
+        const noradrenalineSingle = document.getElementById('noradrenaline-single');
+        const noradrenalineDouble = document.getElementById('noradrenaline-double');
+        const noradrenalineQuad = document.getElementById('noradrenaline-quad');
+        const vasopressin = document.getElementById('vasopressin');
+        const metaraminolInfusion = document.getElementById('metaraminol-infusion');
+        const metaraminolBolus = document.getElementById('metaraminol-bolus');
+        const terlipressinBolus = document.getElementById('terlipressin-bolus');
+        const milrinone = document.getElementById('milrinone');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // Add event listeners to all inputs
+        const inputs = [
+            bodyWeight, dobutamine, adrenaline, 
+            noradrenalineSingle, noradrenalineDouble, noradrenalineQuad,
+            vasopressin, metaraminolInfusion, metaraminolBolus,
+            terlipressinBolus, milrinone
+        ];
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Clear button functionality
+        clearBtn.addEventListener('click', function() {
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            // Reset all result fields
+            const resultIds = [
+                'result-dopamine', 'result-dobutamine', 'result-adrenaline',
+                'result-noradrenaline', 'result-vasopressin', 'result-phenylepherine',
+                'result-metaraminol-infusion', 'result-terlipressin-infusion',
+                'result-metaraminol-bolus', 'result-terlipressin-bolus', 'result-milrinone'
+            ];
+            resultIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = '-';
+            });
+            // Show the weight warning again
+            document.getElementById('weightWarning').textContent = 'Please Enter Weight';
+        });
+        
+        function formatNumber(value) {
+            if (value === null || value === undefined || value === '' || isNaN(value)) {
+                return '-';
+            }
+            // Round to 2 decimal places
+            return parseFloat(value).toFixed(2);
+        }
+        
+        function calculate() {
+            const weight = parseFloat(bodyWeight.value) || 0;
+            const weightWarning = document.getElementById('weightWarning');
+            
+            // Show warning if no weight entered
+            if (weight === 0) {
+                weightWarning.textContent = 'Please Enter Weight';
+            } else {
+                weightWarning.textContent = '';
+            }
+            
+            // Dobutamine: =IF(D3,5000*$D$3/$D$2/60,"")
+            const dobutamineValue = parseFloat(dobutamine.value) || 0;
+            let resultDobutamine = '';
+            if (dobutamineValue && weight) {
+                resultDobutamine = (5000 * dobutamineValue / weight / 60);
+            }
+            document.getElementById('result-dobutamine').textContent = formatNumber(resultDobutamine);
+            
+            // Adrenaline: =IF(D4,80*D4/$D$2/60,"")
+            const adrenalineValue = parseFloat(adrenaline.value) || 0;
+            let resultAdrenaline = '';
+            if (adrenalineValue && weight) {
+                resultAdrenaline = (80 * adrenalineValue / weight / 60);
+            }
+            document.getElementById('result-adrenaline').textContent = formatNumber(resultAdrenaline);
+            
+            // Noradrenaline: =IF(D5,80*$D$5/$D$2/60,(IF(D6,160*$D$6/$D$2/60,(IF(D7,320*$D$7/$D$2/60,"")))))
+            const noraSingle = parseFloat(noradrenalineSingle.value) || 0;
+            const noraDouble = parseFloat(noradrenalineDouble.value) || 0;
+            const noraQuad = parseFloat(noradrenalineQuad.value) || 0;
+            let resultNoradrenaline = '';
+            
+            if (noraSingle && weight) {
+                resultNoradrenaline = (80 * noraSingle / weight / 60);
+            } else if (noraDouble && weight) {
+                resultNoradrenaline = (160 * noraDouble / weight / 60);
+            } else if (noraQuad && weight) {
+                resultNoradrenaline = (320 * noraQuad / weight / 60);
+            }
+            document.getElementById('result-noradrenaline').textContent = formatNumber(resultNoradrenaline);
+            
+            // Vasopressin: =IF(D8,0.4*D8/60,"")
+            const vasopressinValue = parseFloat(vasopressin.value) || 0;
+            let resultVasopressin = '';
+            if (vasopressinValue) {
+                resultVasopressin = (0.4 * vasopressinValue / 60);
+            }
+            document.getElementById('result-vasopressin').textContent = formatNumber(resultVasopressin);
+            
+            // Metaraminol Infusion: =IF(D9,D9*0.5,"")
+            const metaraminolInfusionValue = parseFloat(metaraminolInfusion.value) || 0;
+            let resultMetaraminolInfusion = '';
+            if (metaraminolInfusionValue) {
+                resultMetaraminolInfusion = metaraminolInfusionValue * 0.5;
+            }
+            document.getElementById('result-metaraminol-infusion').textContent = formatNumber(resultMetaraminolInfusion);
+            
+            // Metaraminol Bolus: =IF(D10,D10*0.5,"")
+            const metaraminolBolusValue = parseFloat(metaraminolBolus.value) || 0;
+            let resultMetaraminolBolus = '';
+            if (metaraminolBolusValue) {
+                resultMetaraminolBolus = metaraminolBolusValue * 0.5;
+            }
+            document.getElementById('result-metaraminol-bolus').textContent = formatNumber(resultMetaraminolBolus);
+            
+            // Terlipressin Bolus: =IF(D11,D11,"")
+            const terlipressinBolusValue = parseFloat(terlipressinBolus.value) || 0;
+            let resultTerlipressinBolus = '';
+            if (terlipressinBolusValue) {
+                resultTerlipressinBolus = terlipressinBolusValue;
+            }
+            document.getElementById('result-terlipressin-bolus').textContent = formatNumber(resultTerlipressinBolus);
+            
+            // Milrinone: =IF(D12,200*$D$12/$D$2/60,"")
+            const milrinoneValue = parseFloat(milrinone.value) || 0;
+            let resultMilrinone = '';
+            if (milrinoneValue && weight) {
+                resultMilrinone = (200 * milrinoneValue / weight / 60);
+            }
+            document.getElementById('result-milrinone').textContent = formatNumber(resultMilrinone);
+            
+            // Dopamine and Phenylepherine don't have formulas in the spreadsheet
+            document.getElementById('result-dopamine').textContent = '-';
+            document.getElementById('result-phenylepherine').textContent = '-';
+            document.getElementById('result-terlipressin-infusion').textContent = '-';
+        }
+        
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
